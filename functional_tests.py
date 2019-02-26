@@ -23,7 +23,6 @@ class NovoArquitetoTeste(unittest.TestCase):
     def test_pode_ver_noticias_de_arquitetura(self):
         self.selenium.get('http://localhost:8000')
         self.assertIn('Novidades em arquitetura', self.selenium.title)
-        self.fail('Finish the test!')
 
     # Arquiteto acessa a Home do site, consegue visualizar as notícias
     # mais recentes sobre arquitetura, com uma imagem de capa e título
@@ -45,6 +44,8 @@ class NovoArquitetoTeste(unittest.TestCase):
     # Arquiteto na Home do site, informa a categoria que deseja e assim
     # as notícias relacionadas àquela categoria são exibidas
 
+    def test_unfinished_tests(self):
+        self.fail('Finish the test!')
 
 # =======
 # Dado que sou um Administrador eu posso acessar uma área restrita e segura
@@ -59,6 +60,7 @@ class NovoArquitetoTeste(unittest.TestCase):
 # Administrador consegue definir uma imagem de capa e o texto da notícia.
 
 # Administrador consegue informar a qual categoria a notícia pertence.
+
 
 if __name__ == '__main__':
     unittest.main()
