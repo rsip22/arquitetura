@@ -26,11 +26,19 @@ class NovoArquitetoTeste(unittest.TestCase):
 
     # Arquiteto acessa a Home do site, consegue visualizar as notícias
     # mais recentes sobre arquitetura, com uma imagem de capa e título
-    def test_pode_ver_noticias_de_arquitetura(self):
+    def test_pode_ver_noticias_de_arquitetura_com_titulo_e_imagem(self):
         self.selenium.get('http://localhost:8000')
         section_news = self.selenium.find_element_by_tag_name('section')
-        news_item = section_news.find_elements.by_tag_name('article')
-        self.assertTrue(news_item.h1 == '' for item in news_item)
+        news_item = section_news.find_elements_by_tag_name('article')
+        self.assertTrue(
+            any(
+                item.text == 'Notícia de arquitetura'
+                for item in news_item
+            )
+        )
+        news_img = section_news.find_elements_by_tag_name('img')
+        self.assertTrue(image.src == 'dummy.png'
+                        for image in news_img)
 
     # =======
     # Dado que sou um Arquiteto eu posso visualizar uma notícia na íntegra
