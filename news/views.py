@@ -1,5 +1,6 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def home_page(req):
-    return HttpResponse('<html><title>Novidades em arquitetura</title></html>')
+    return render(req, 'home.html')

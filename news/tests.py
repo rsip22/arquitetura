@@ -1,4 +1,3 @@
-from django.http import HttpRequest
 from django.urls import resolve
 from django.test import TestCase
 
@@ -11,10 +10,6 @@ class HomePageTest(TestCase):
         found = resolve('/')
         self.assertEqual(found.func, home_page)
 
-    def test_pagina_raiz_retona_html_correto(self):
-        request = HttpRequest()
-        response = home_page(request)
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>Novidades em arquitetura</title>', html)
-        self.assertTrue(html.endswith('</html>'))
+    def test_pagina_raiz_retona_template_correto(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
