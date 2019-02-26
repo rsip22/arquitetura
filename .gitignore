@@ -1,0 +1,12 @@
+# Selenium log
+geckodriver.log
+
+# Python cache files
+*.pyc
+__pycache__
+
+# Dev database
+db.sqlite3
+
+# Static files
+/static
