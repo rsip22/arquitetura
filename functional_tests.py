@@ -4,6 +4,10 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 
 class NovoArquitetoTeste(unittest.TestCase):
+    """
+    Dado que sou um Arquiteto eu posso visualizar notícias, então poderei
+    ficar informado sobre as novidades em arquitetura.
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -15,20 +19,20 @@ class NovoArquitetoTeste(unittest.TestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    # =======
-    # Dado que sou um Arquiteto eu posso visualizar notícias, então poderei
-    # ficar informado sobre as novidades em arquitetura.
-
-    # Arquiteto acessa a Home do site
     def test_pode_acessar_home_e_encontrar_o_site(self):
+        """ Arquiteto acessa a Home do site """
         self.selenium.get('http://localhost:8000')
         self.assertIn('Novidades em arquitetura', self.selenium.title)
 
-    # Arquiteto acessa a Home do site, consegue visualizar as notícias
-    # mais recentes sobre arquitetura, com uma imagem de capa e título
     def test_pode_ver_noticias_de_arquitetura_com_titulo_e_imagem(self):
+        """
+        Arquiteto acessa a Home do site, consegue visualizar as notícias
+        mais recentes sobre arquitetura, com uma imagem de capa e título
+        """
         self.selenium.get('http://localhost:8000')
+
         section_news = self.selenium.find_element_by_tag_name('section')
+
         news_item = section_news.find_elements_by_tag_name('article')
         self.assertTrue(
             any(
@@ -36,9 +40,14 @@ class NovoArquitetoTeste(unittest.TestCase):
                 for item in news_item
             )
         )
+
         news_img = section_news.find_elements_by_tag_name('img')
-        self.assertTrue(image.src == 'dummy.png'
-                        for image in news_img)
+        self.assertTrue(
+            any(
+                'dummy.png' in image.get_attribute('src')
+                for image in news_img
+            )
+        )
 
     # =======
     # Dado que sou um Arquiteto eu posso visualizar uma notícia na íntegra
