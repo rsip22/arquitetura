@@ -1,5 +1,7 @@
+import time
 import unittest
 
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 
@@ -49,12 +51,41 @@ class NovoArquitetoTeste(unittest.TestCase):
             )
         )
 
+    def test_arquiteto_seleciona_noticia_visualiza_conteudo(self):
+        """
+        Arquiteto na Home do site, seleciona uma notícia de
+        interesse para visualizar o conteúdo na íntegra.
+        """
+        self.selenium.get('http://localhost:8000')
+        section_news = self.selenium.find_element_by_tag_name('section')
+        list_news = section_news.find_element_by_tag_name('a')
+        list_news.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        news_article = self.selenium.find_element_by_tag_name('article')
+        news_title = news_article.find_element_by_tag_name('h2')
+        news_image = news_article.find_elements_by_tag_name('img')
+        news_text = news_article.find_elements_by_tag_name('p')
+
+        self.assertIn('Notícia de arquitetura', news_title.text)
+
+        self.assertTrue(
+            any(
+                'dummy.png' in image.get_attribute('src')
+                for image in news_image
+            )
+        )
+
+        self.assertTrue(
+            any(
+                '<p>Exemplo de notícia de arquitetura</p>' in text.text
+                for text in news_text
+            )
+        )
+
     # =======
     # Dado que sou um Arquiteto eu posso visualizar uma notícia na íntegra
     # então poderei ver todo o seu conteúdo.
-
-    # Arquiteto na Home do site, seleciona uma notícia de
-    # interesse para visualizar o conteúdo na íntegra.
 
     # Arquiteto pode visualizar uma imagem de capa da notícia
     # e o conteúdo da mesma
