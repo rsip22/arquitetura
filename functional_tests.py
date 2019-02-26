@@ -1,33 +1,49 @@
-from selenium import webdriver
+import unittest
 
-browser = webdriver.Firefox()
+from selenium.webdriver.firefox.webdriver import WebDriver
 
-# =======
-# Dado que sou um Arquiteto eu posso visualizar notícias então poderei estar
-# informado sobre as novidades em arquitetura.
 
-# Arquiteto acessa a Home do site
-browser.get('http://localhost:8000')
-assert 'Novidades em arquitetura' in browser.title, f'Título no navegador era {browser.title}'
+class NovoArquitetoTeste(unittest.TestCase):
 
-# Arquiteto acessa a Home do site, consegue visualizar as notícias
-# mais recentes sobre arquitetura, com uma imagem de capa e título
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.selenium = WebDriver()
 
-# =======
-# Dado que sou um Arquiteto eu posso visualizar uma notícia na íntegra
-# então poderei ver todo o seu conteúdo.
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super().tearDownClass()
 
-# Arquiteto na Home do site, seleciona uma notícia de
-# interesse para visualizar o conteúdo na íntegra.
+    # =======
+    # Dado que sou um Arquiteto eu posso visualizar notícias, então poderei
+    # ficar informado sobre as novidades em arquitetura.
 
-# Arquiteto pode visualizar uma imagem de capa da notícia e o conteúdo da mesma
+    # Arquiteto acessa a Home do site
+    def test_pode_ver_noticias_de_arquitetura(self):
+        self.selenium.get('http://localhost:8000')
+        self.assertIn('Novidades em arquitetura', self.selenium.title)
+        self.fail('Finish the test!')
 
-# =======
-# Dado que sou um Arquiteto eu posso visualizar as notícias filtradas por suas
-# categorias então eu poderei selecionar as notícias de meu interesse.
+    # Arquiteto acessa a Home do site, consegue visualizar as notícias
+    # mais recentes sobre arquitetura, com uma imagem de capa e título
 
-# Arquiteto na Home do site, informa a categoria que deseja e assim
-# as notícias relacionadas àquela categoria são exibidas
+    # =======
+    # Dado que sou um Arquiteto eu posso visualizar uma notícia na íntegra
+    # então poderei ver todo o seu conteúdo.
+
+    # Arquiteto na Home do site, seleciona uma notícia de
+    # interesse para visualizar o conteúdo na íntegra.
+
+    # Arquiteto pode visualizar uma imagem de capa da notícia
+    # e o conteúdo da mesma
+
+    # =======
+    # Dado que sou um Arquiteto eu posso visualizar as notícias filtradas por
+    # suas categorias então eu poderei selecionar as notícias de meu interesse.
+
+    # Arquiteto na Home do site, informa a categoria que deseja e assim
+    # as notícias relacionadas àquela categoria são exibidas
 
 
 # =======
@@ -44,4 +60,5 @@ assert 'Novidades em arquitetura' in browser.title, f'Título no navegador era {
 
 # Administrador consegue informar a qual categoria a notícia pertence.
 
-browser.quit()
+if __name__ == '__main__':
+    unittest.main()
