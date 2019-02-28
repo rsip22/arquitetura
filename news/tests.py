@@ -1,7 +1,7 @@
 from django.urls import resolve
 from django.test import TestCase
 
-from news.models import Post
+from news.models import Post, Tag
 from news.views import home_page
 
 
@@ -25,18 +25,25 @@ class HomePageTest(TestCase):
 class NewsModelTest(TestCase):
 
     def test_salvando_e_buscando_noticias(self):
+        tag_decor = Tag()
+        tag_decor.name = 'decoração'
+        tag_decor.save()
+        tag_planejamento = Tag()
+        tag_planejamento.name = 'planejamento'
+        tag_planejamento.save()
+
         news1 = Post()
         news1.title = 'Notícia de arquitetura'
         news1.text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         news1.image_path = 'dummy.png'
-        news1.tag = 'decoração'
+        news1.tag = tag_decor
         news1.save()
 
         news2 = Post()
         news2.title = 'Outra notícia de arquitetura'
         news2.text = 'Lorem ipsum praesent libero'
         news2.image_path = 'dummy2.png'
-        news2.tag = 'planejamento'
+        news2.tag = tag_planejamento
         news2.save()
 
         saved_news = Post.objects.all()
@@ -50,11 +57,13 @@ class NewsModelTest(TestCase):
         self.assertEqual(second_saved_news.title,
                          'Outra notícia de arquitetura')
 
-        self.assertEqual(first_saved_news.text, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
+        self.assertEqual(first_saved_news.text,
+                         'Lorem ipsum dolor sit amet,'
+                         ' consectetur adipiscing elit.')
         self.assertEqual(second_saved_news.text, 'Lorem ipsum praesent libero')
 
         self.assertEqual(first_saved_news.image_path, 'dummy.png')
         self.assertEqual(second_saved_news.image_path, 'dummy2.png')
 
-        self.assertEqual(first_saved_news.tag, 'decoração')
-        self.assertEqual(second_saved_news.tag, 'planejamento')
+        self.assertEqual(first_saved_news.tag, tag_decor)
+        self.assertEqual(second_saved_news.tag, tag_planejamento)
