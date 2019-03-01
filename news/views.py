@@ -5,7 +5,8 @@ from .models import Post
 
 
 def home_page(req):
-    items = Post.objects.all().filter(published_date__lte=timezone.now())
+    items = Post.objects.all().filter(
+                published_date__lte=timezone.now()).order_by('published_date')
     return render(req, 'home.html', {'items': items})
 
 

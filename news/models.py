@@ -21,6 +21,7 @@ class Post(models.Model):
     image_path = models.ImageField('Endereço da imagem',
                                    upload_to='media',
                                    default=None)
+    created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     tags = models.ManyToManyField(Tag,
                                   related_name='tag',
