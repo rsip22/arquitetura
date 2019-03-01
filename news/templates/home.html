@@ -5,6 +5,7 @@
         {% for item in items %}
             <article>
                 <h2><a href="{% url 'news:post_detail' pk=item.pk %}">{{ item.title }}</a></h2>
+                <p>Published: {{ item.published_date }}</p>
                 {% if item.show_tags %}
                     <ul>
                         {% for tag in item.show_tags %}

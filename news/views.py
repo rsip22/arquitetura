@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 
 from .models import Post
 
 
 def home_page(req):
-    items = Post.objects.all()
+    items = Post.objects.all().filter(published_date__lte=timezone.now())
     return render(req, 'home.html', {'items': items})
 
 

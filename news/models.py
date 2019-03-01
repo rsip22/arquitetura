@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Tag(models.Model):
@@ -20,6 +21,7 @@ class Post(models.Model):
     image_path = models.ImageField('Endereço da imagem',
                                    upload_to='media',
                                    default=None)
+    published_date = models.DateTimeField(blank=True, null=True)
     tags = models.ManyToManyField(Tag,
                                   related_name='tag',
                                   blank=True,
@@ -27,6 +29,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
 
     def show_tags(self):
         return self.tags.all()

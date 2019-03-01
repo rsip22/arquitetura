@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>{{ item.title }}</h1>
+    <p>Published: {{ item.published_date }}</p>
     {% if item.show_tags %}
         <ul>
             {% for tag in item.show_tags %}

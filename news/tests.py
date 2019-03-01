@@ -22,15 +22,17 @@ class HomePageTest(TestCase):
         post1 = Post.objects.create(title='Notícia 01',
                                     text='Lorem ipsum dolor simet')
         post1.tags.add(tag_arq)
+        post1.publish()
 
         post2 = Post.objects.create(title='Notícia decoração',
                                     text='Lorem ipsum dolor simet')
         post2.tags.add(tag_decor)
+        post2.publish()
 
         post3 = Post.objects.create(title='Arquitetura e decoração',
                                     text='Lorem ipsum dolor')
-        post3.tags.add(tag_arq)
-        post3.tags.add(tag_decor)
+        post3.tags.add(tag_arq, tag_decor)
+        post3.publish()
 
         response = self.client.get('/')
 
@@ -43,7 +45,10 @@ class HomePageTest(TestCase):
         self.post1 = Post.objects.create(title='Notícia 01',
                                          text='Lorem ipsum dolor simet')
         self.post1.tags.add(self.tag_arq)
+        self.post1.publish()
+
         response = self.client.get('/')
+
         self.assertIn(self.post1.text, response.content.decode())
         self.assertIn(self.post1.title, response.content.decode())
         self.assertIn('h2', response.content.decode())
@@ -57,6 +62,7 @@ class PostPageTest(TestCase):
         self.post1 = Post.objects.create(title='Notícia 01',
                                          text='Lorem ipsum dolor simet')
         self.post1.tags.add(self.tag_arq)
+        self.post1.publish()
 
         response = self.client.get(f'/post/{self.post1.pk}/')
 
