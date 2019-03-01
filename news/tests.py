@@ -16,26 +16,36 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'home.html')
 
     def test_pagina_raiz_mostra_todos_os_posts(self):
-        Post.objects.create(title='Notícia 01',
-                            text='Lorem ipsum dolor simet',
-                            tag=Tag.objects.create(name='arquitetura'))
+        tag_arq = Tag.objects.create(name='arquitetura')
+        tag_decor = Tag.objects.create(name='decoração')
 
-        Post.objects.create(title='Notícia decoração',
-                            text='Lorem ipsum dolor simet',
-                            tag=Tag.objects.create(name='decoração'))
+        post1 = Post.objects.create(title='Notícia 01',
+                                    text='Lorem ipsum dolor simet')
+        post1.tags.add(tag_arq)
+
+        post2 = Post.objects.create(title='Notícia decoração',
+                                    text='Lorem ipsum dolor simet')
+        post2.tags.add(tag_decor)
+
+        post3 = Post.objects.create(title='Arquitetura e decoração',
+                                    text='Lorem ipsum dolor')
+        post3.tags.add(tag_arq)
+        post3.tags.add(tag_decor)
 
         response = self.client.get('/')
 
-        self.assertIn('Notícia 01', response.content.decode())
-        self.assertIn('Notícia decoração', response.content.decode())
+        self.assertIn(post1.title, response.content.decode())
+        self.assertIn(post2.title, response.content.decode())
+        self.assertIn(post3.title, response.content.decode())
 
     def test_pagina_raiz_contem_noticias_com_titulo_e_imagem(self):
-        item1 = Post.objects.create(title='Notícia 01',
-                                    text='Lorem ipsum dolor simet',
-                                    tag=Tag.objects.create(name='arquitetura'))
+        self.tag_arq = Tag.objects.create(name='arquitetura')
+        self.post1 = Post.objects.create(title='Notícia 01',
+                                         text='Lorem ipsum dolor simet')
+        self.post1.tags.add(self.tag_arq)
         response = self.client.get('/')
-        self.assertIn(item1.text, response.content.decode())
-        self.assertIn(item1.title, response.content.decode())
+        self.assertIn(self.post1.text, response.content.decode())
+        self.assertIn(self.post1.title, response.content.decode())
         self.assertIn('h2', response.content.decode())
         self.assertIn('img', response.content.decode())
 
@@ -54,34 +64,55 @@ class NewsModelTest(TestCase):
         news1.title = 'Notícia de arquitetura'
         news1.text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         news1.image_path = 'dummy.png'
-        news1.tag = tag_decor
+        news1.save()
+        news1.tags.add(tag_decor)
         news1.save()
 
         news2 = Post()
         news2.title = 'Outra notícia de arquitetura'
         news2.text = 'Lorem ipsum praesent libero'
         news2.image_path = 'dummy2.png'
-        news2.tag = tag_planejamento
+        news2.save()
+        news2.tags.add(tag_planejamento)
         news2.save()
 
-        saved_news = Post.objects.all()
-        self.assertEqual(saved_news.count(), 2)
+        news3 = Post()
+        news3.title = 'Notícia de arquitetura e de decoração'
+        news3.text = 'Lorem ipsum libero'
+        # news3.tag = tag_planejamento, tag_decor
+        news3.save()
+        news3.tags.add(tag_planejamento, tag_decor)
+        news3.save()
 
-        first_saved_news = saved_news[0]
-        second_saved_news = saved_news[1]
+        saved_news = Post.objects.all()
+        self.assertEqual(saved_news.count(), 3)
+
+        first_saved_news = Post.objects.get(pk=1)
+        second_saved_news = Post.objects.get(pk=2)
+        third_saved_news = Post.objects.get(pk=3)
 
         self.assertEqual(first_saved_news.title,
                          'Notícia de arquitetura')
         self.assertEqual(second_saved_news.title,
                          'Outra notícia de arquitetura')
+        self.assertEqual(third_saved_news.title,
+                         'Notícia de arquitetura e de decoração')
 
         self.assertEqual(first_saved_news.text,
                          'Lorem ipsum dolor sit amet,'
                          ' consectetur adipiscing elit.')
         self.assertEqual(second_saved_news.text, 'Lorem ipsum praesent libero')
+        self.assertEqual(third_saved_news.text, 'Lorem ipsum libero')
 
         self.assertEqual(first_saved_news.image_path, 'dummy.png')
         self.assertEqual(second_saved_news.image_path, 'dummy2.png')
+        self.assertFalse(bool(third_saved_news.image_path))
 
-        self.assertEqual(first_saved_news.tag, tag_decor)
-        self.assertEqual(second_saved_news.tag, tag_planejamento)
+        self.assertIn(tag_decor,
+                      [tag for tag in first_saved_news.tags.all()])
+        self.assertIn(tag_planejamento,
+                      [tag for tag in second_saved_news.tags.all()])
+        self.assertIn(tag_decor,
+                      [tag for tag in third_saved_news.tags.all()])
+        self.assertIn(tag_planejamento,
+                      [tag for tag in third_saved_news.tags.all()])

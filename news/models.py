@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class Tag(models.Model):
+    """
+    Model for the article's tags.
+    """
+    name = models.CharField(max_length=200, default='')
+
+    def __str__(self):
+        return self.name
+
+
 class Post(models.Model):
     """
     Model for the news articles.
@@ -10,21 +20,14 @@ class Post(models.Model):
     image_path = models.ImageField('Endereço da imagem',
                                    upload_to='media',
                                    default=None)
-    tag = models.ForeignKey('Tag',
-                            related_name='tag',
-                            blank=True,
-                            on_delete=models.SET_NULL,
-                            null=True)
+    tags = models.ManyToManyField(Tag,
+                                  related_name='tag',
+                                  blank=True,
+                                  help_text='Categorias do artigo')
 
     def __str__(self):
         return self.title
 
-
-class Tag(models.Model):
-    """
-    Model for the article's tags.
-    """
-    name = models.CharField(max_length=200, default='')
-
-    def __str__(self):
-        return f'{self.name}'
+    def show_tags(self):
+        return ', '.join(
+            [tags.tags for tags in self.tags.all()])
