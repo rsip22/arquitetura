@@ -10,3 +10,6 @@ db.sqlite3
 
 # Static files
 /static
+
+# Enviroment variables
+.env

@@ -1,4 +1,5 @@
 Django==2.1.7
+django-environ==0.4.5
 Pillow==5.4.1
 pytz==2018.9
 selenium==3.141.0

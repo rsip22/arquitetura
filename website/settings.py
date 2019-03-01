@@ -10,11 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import environ
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+
+root = environ.Path(__file__) - 3
+env = environ.Env(DEBUG=(bool, False),)  # set default values and casting
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Media files (images)
 MEDIA_ROOT = MEDIA_DIR
@@ -24,7 +29,7 @@ MEDIA_URL = '/media/'
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g(^0q1le##l%xaqlv-+)9dmd!yxk7nn7zqqy8@j!g8e0l&zhrh'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

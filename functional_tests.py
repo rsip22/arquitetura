@@ -1,8 +1,16 @@
+import environ
 import time
 import unittest
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
+import django.core.exceptions
+
+# Load environment variables
+env = environ.Env(
+        DEBUG=(bool, False),
+    )
+environ.Env.read_env()
 
 
 class NovoArquitetoTeste(unittest.TestCase):
@@ -120,13 +128,41 @@ class NovoArquitetoTeste(unittest.TestCase):
             )
         )
 
+
+class AdministradorTeste(unittest.TestCase):
+    """
+    Dado que sou um Administrador eu posso acessar uma área restrita e segura
+    para que somente eu possa inserir novas notícias.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.selenium = WebDriver()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super().tearDownClass()
+
+    def test_administrador_pode_acessar_area_restrita(self):
+        self.selenium.get('http://localhost:8000/admin')
+
+        try:
+            input = self.selenium.find_element_by_id("id_username")
+            input.send_keys(env('LOGIN'))
+            input = self.selenium.find_element_by_id("id_password")
+            input.send_keys(env('PASSWORD'))
+            input.send_keys(Keys.ENTER)
+            # input.find_element_by_tag_name("button").click()
+        except Exception as e:
+            print(e)
+
     def test_unfinished_tests(self):
         self.fail('Finish the test!')
 
-# =======
-# Dado que sou um Administrador eu posso acessar uma área restrita e segura
-# para que somente eu possa inserir novas notícias.
 
+# =======
 # Administrador pode informar o e-mail e senha para acessar a plataforma.
 
 # =======
