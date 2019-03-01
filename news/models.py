@@ -9,7 +9,7 @@ class Post(models.Model):
     text = models.TextField(default='')
     image_path = models.ImageField('Endereço da imagem',
                                    upload_to='media',
-                                   default='pic_folder/user/no-img.jpg')
+                                   default=None)
     tag = models.ForeignKey('Tag',
                             related_name='tag',
                             blank=True,

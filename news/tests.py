@@ -15,9 +15,27 @@ class HomePageTest(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-    def test_pagina_raiz_contem_noticias_com_titulo_e_imagem(self):
+    def test_pagina_raiz_mostra_todos_os_posts(self):
+        Post.objects.create(title='Notícia 01',
+                            text='Lorem ipsum dolor simet',
+                            tag=Tag.objects.create(name='arquitetura'))
+
+        Post.objects.create(title='Notícia decoração',
+                            text='Lorem ipsum dolor simet',
+                            tag=Tag.objects.create(name='decoração'))
+
         response = self.client.get('/')
-        self.assertIn('Notícia de arquitetura', response.content.decode())
+
+        self.assertIn('Notícia 01', response.content.decode())
+        self.assertIn('Notícia decoração', response.content.decode())
+
+    def test_pagina_raiz_contem_noticias_com_titulo_e_imagem(self):
+        item1 = Post.objects.create(title='Notícia 01',
+                                    text='Lorem ipsum dolor simet',
+                                    tag=Tag.objects.create(name='arquitetura'))
+        response = self.client.get('/')
+        self.assertIn(item1.text, response.content.decode())
+        self.assertIn(item1.title, response.content.decode())
         self.assertIn('h2', response.content.decode())
         self.assertIn('img', response.content.decode())
 

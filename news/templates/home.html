@@ -4,26 +4,21 @@
     </header>
     <body>
         <section>
-            <article>
-                <h2><a href="">Notícia de arquitetura</a></h2>
-                <img src="dummy.png" />
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.
-                    Sed nisi. Nulla quis sem at nibh elementum imperdiet.
-                    Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed
-                    augue semper porta. Mauris massa. Vestibulum lacinia arcu
-                    eget nulla. Class aptent taciti sociosqu ad litora torquent
-                    per conubia nostra, per inceptos himenaeos. Curabitur sodales
-                    ligula in libero.
-                </p>
-            </article>
-            <article>
-                <h2></h2>
-            </article>
-            <article>
-                <h2></h2>
-            </article>
-        <section>
+            {% for item in items %}
+                <article>
+                    <h2><a href="">{{ item.title }}</a></h2>
+                    {% if image_path %}
+                        <img src="{{ item.image_path }}" />
+                    {% else %}
+                        <img src="http://placekitten.com/600/400" />
+                    {% endif %}
+                    <p>
+                        {{ item.text }}
+                    </p>
+                    {{ item.tag }}
+                </article>
+            {% endfor %}
+            <hr>
+        </section>
     </body>
 </html>
