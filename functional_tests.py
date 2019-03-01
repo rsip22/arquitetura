@@ -26,7 +26,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         self.selenium.get('http://localhost:8000')
         self.assertIn('Novidades em arquitetura', self.selenium.title)
 
-    def test_pode_ver_noticias_de_arquitetura_com_titulo_e_imagem(self):
+    def test_pode_ver_noticias_com_titulo_imagem_e_tags(self):
         """
         Arquiteto acessa a Home do site, consegue visualizar as notícias
         mais recentes sobre arquitetura, com uma imagem de capa e título
@@ -34,24 +34,23 @@ class NovoArquitetoTeste(unittest.TestCase):
         self.selenium.get('http://localhost:8000')
 
         section_news = self.selenium.find_element_by_tag_name('section')
-
-        news_item = section_news.find_elements_by_tag_name('article')
+        news_title = section_news.find_elements_by_tag_name('h2')
         self.assertTrue(
             any(
-                item.text == 'Notícia de arquitetura'
-                for item in news_item
+                item.text == 'Novidades sobre arquitetura'
+                for item in news_title
             )
         )
 
         news_img = section_news.find_elements_by_tag_name('img')
         self.assertTrue(
             any(
-                'dummy.png' in image.get_attribute('src')
+                'http://placekitten.com/600/400' in image.get_attribute('src')
                 for image in news_img
             )
         )
 
-    def test_arquiteto_seleciona_noticia_visualiza_conteudo(self):
+    def test_arquiteto_seleciona_noticia_visualiza_integra_conteudo(self):
         """
         Arquiteto na Home do site, seleciona uma notícia de
         interesse para visualizar o conteúdo na íntegra.
@@ -67,7 +66,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         news_image = news_article.find_elements_by_tag_name('img')
         news_text = news_article.find_elements_by_tag_name('p')
 
-        self.assertIn('Notícia de arquitetura', news_title.text)
+        self.assertIn('Novidades sobre arquitetura', news_title.text)
 
         self.assertTrue(
             any(

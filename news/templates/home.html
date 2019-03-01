@@ -7,6 +7,13 @@
             {% for item in items %}
                 <article>
                     <h2><a href="">{{ item.title }}</a></h2>
+                    {% if item.show_tags %}
+                        <ul>
+                            {% for tag in item.show_tags %}
+                                <li>{{ tag }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     {% if image_path %}
                         <img src="{{ item.image_path }}" />
                     {% else %}
@@ -15,7 +22,6 @@
                     <p>
                         {{ item.text }}
                     </p>
-                    {{ item.tag }}
                 </article>
             {% endfor %}
             <hr>

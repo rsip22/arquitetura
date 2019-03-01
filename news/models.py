@@ -29,5 +29,4 @@ class Post(models.Model):
         return self.title
 
     def show_tags(self):
-        return ', '.join(
-            [tags.tags for tags in self.tags.all()])
+        return self.tags.all()
