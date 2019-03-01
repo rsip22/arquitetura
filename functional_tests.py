@@ -35,6 +35,8 @@ class NovoArquitetoTeste(unittest.TestCase):
 
         section_news = self.selenium.find_element_by_tag_name('section')
         news_title = section_news.find_elements_by_tag_name('h2')
+        news_img = section_news.find_elements_by_tag_name('img')
+
         self.assertTrue(
             any(
                 item.text == 'Novidades sobre arquitetura'
@@ -42,7 +44,6 @@ class NovoArquitetoTeste(unittest.TestCase):
             )
         )
 
-        news_img = section_news.find_elements_by_tag_name('img')
         self.assertTrue(
             any(
                 'http://placekitten.com/600/400' in image.get_attribute('src')
@@ -65,9 +66,14 @@ class NovoArquitetoTeste(unittest.TestCase):
         news_title = news_article.find_element_by_tag_name('h1')
         news_image = news_article.find_elements_by_tag_name('img')
         news_text = news_article.find_elements_by_tag_name('p')
+        news_tags = news_article.find_elements_by_tag_name('li')
 
         self.assertIn('Novidades sobre arquitetura', news_title.text)
 
+        """
+        Sendo um Arquiteto eu posso visualizar uma imagem de capa de notícia
+        e o conteúdo da mesma.
+        """
         self.assertTrue(
             any(
                 'http://placekitten.com/600/400' in image.get_attribute('src')
@@ -82,19 +88,37 @@ class NovoArquitetoTeste(unittest.TestCase):
             )
         )
 
-    # =======
-    # Dado que sou um Arquiteto eu posso visualizar uma notícia na íntegra
-    # então poderei ver todo o seu conteúdo.
+        """
+        Arquiteto pode visualizar as notícias filtradas por suas categorias
+        e eu pode selecionar as notícias de seu interesse.
+        """
+        self.assertTrue(
+            any(
+                'arquitetura' in tags.text
+                for tags in news_tags
+            )
+        )
 
-    # Arquiteto pode visualizar uma imagem de capa da notícia
-    # e o conteúdo da mesma
+    def test_arquiteto_seleciona_noticias_por_tag(self):
+        """
+        Arquiteto na Home do site, informa a categoria que deseja e assim
+        as notícias relacionadas àquela categoria são exibidas
+        """
 
-    # =======
-    # Dado que sou um Arquiteto eu posso visualizar as notícias filtradas por
-    # suas categorias então eu poderei selecionar as notícias de meu interesse.
+        self.selenium.get('http://localhost:8000')
+        news_tag = self.selenium.find_element_by_tag_name('li')
+        tag_link = news_tag.find_element_by_tag_name('a')
+        tag_link.send_keys(Keys.ENTER)
+        time.sleep(1)
 
-    # Arquiteto na Home do site, informa a categoria que deseja e assim
-    # as notícias relacionadas àquela categoria são exibidas
+        news_tags = self.selenium.find_elements_by_tag_name('li')
+
+        self.assertTrue(
+            any(
+                'arquitetura' in tags.text
+                for tags in news_tags
+            )
+        )
 
     def test_unfinished_tests(self):
         self.fail('Finish the test!')

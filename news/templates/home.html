@@ -9,7 +9,7 @@
                 {% if item.show_tags %}
                     <ul>
                         {% for tag in item.show_tags %}
-                            <li>{{ tag }}</li>
+                            <li><a href="{% url 'news:categories_list' pk=tag.pk %}">{{ tag }}</a></li>
                         {% endfor %}
                     </ul>
                 {% endif %}

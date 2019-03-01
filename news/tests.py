@@ -6,6 +6,9 @@ from news.views import home_page
 
 
 class HomePageTest(TestCase):
+    """
+    Tests for the home page with list of posts.
+    """
 
     def test_pagina_raiz_resolve_para_view_da_homepage(self):
         found = resolve('/')
@@ -56,6 +59,9 @@ class HomePageTest(TestCase):
 
 
 class PostPageTest(TestCase):
+    """
+    Tests for the post detail page.
+    """
 
     def test_pagina_de_noticia_mostra_noticia(self):
         self.tag_arq = Tag.objects.create(name='arquitetura')
@@ -74,7 +80,25 @@ class PostPageTest(TestCase):
         self.assertIn('img', response.content.decode())
 
 
-class NewsModelTest(TestCase):
+class CategoriesPageTest(TestCase):
+    """
+    Tests for the page with the list of posts for a given category.
+    """
+
+    def test_pagina_de_categories_mostra_noticias_da_categoria(self):
+        self.tag_arq = Tag.objects.create(name='arquitetura')
+        # self.post1 = Post.objects.create(title='Notícia 01',
+        #                                  text='Lorem ipsum dolor simet')
+        # self.post1.tags.add(self.tag_arq)
+        # self.post1.publish()
+        response = self.client.get(f'/categories/{self.tag_arq.pk}/')
+        self.assertEqual(response.status_code, 200)
+
+
+class ModelsTest(TestCase):
+    """
+    Tests for the models.
+    """
 
     def test_salvando_e_buscando_noticias(self):
         tag_decor = Tag()
