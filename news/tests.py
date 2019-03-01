@@ -50,6 +50,24 @@ class HomePageTest(TestCase):
         self.assertIn('img', response.content.decode())
 
 
+class PostPageTest(TestCase):
+
+    def test_pagina_de_noticia_mostra_noticia(self):
+        self.tag_arq = Tag.objects.create(name='arquitetura')
+        self.post1 = Post.objects.create(title='Notícia 01',
+                                         text='Lorem ipsum dolor simet')
+        self.post1.tags.add(self.tag_arq)
+
+        response = self.client.get(f'/post/{self.post1.pk}/')
+
+        self.assertIn(self.post1.title, response.content.decode())
+        self.assertIn(self.post1.text, response.content.decode())
+        self.assertIn(f'<li>{self.tag_arq.name}</li>',
+                      response.content.decode())
+        self.assertIn('h1', response.content.decode())
+        self.assertIn('img', response.content.decode())
+
+
 class NewsModelTest(TestCase):
 
     def test_salvando_e_buscando_noticias(self):

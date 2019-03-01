@@ -61,8 +61,8 @@ class NovoArquitetoTeste(unittest.TestCase):
         list_news.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        news_article = self.selenium.find_element_by_tag_name('article')
-        news_title = news_article.find_element_by_tag_name('h2')
+        news_article = self.selenium.find_element_by_tag_name('main')
+        news_title = news_article.find_element_by_tag_name('h1')
         news_image = news_article.find_elements_by_tag_name('img')
         news_text = news_article.find_elements_by_tag_name('p')
 
@@ -70,14 +70,14 @@ class NovoArquitetoTeste(unittest.TestCase):
 
         self.assertTrue(
             any(
-                'dummy.png' in image.get_attribute('src')
+                'http://placekitten.com/600/400' in image.get_attribute('src')
                 for image in news_image
             )
         )
 
         self.assertTrue(
             any(
-                '<p>Exemplo de notícia de arquitetura</p>' in text.text
+                'Lorem ipsum dolor simet' in text.text
                 for text in news_text
             )
         )
