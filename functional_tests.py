@@ -4,11 +4,10 @@ import unittest
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
-import django.core.exceptions
 
 # Load environment variables
 env = environ.Env(
-        DEBUG=(bool, False),
+        DEBUG=(bool, True),
     )
 environ.Env.read_env()
 
@@ -34,6 +33,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         self.selenium.get('http://localhost:8000')
         self.assertIn('Novidades em arquitetura', self.selenium.title)
 
+    #  TODO: fixtures for these tests
     def test_pode_ver_noticias_com_titulo_imagem_e_tags(self):
         """
         Arquiteto acessa a Home do site, consegue visualizar as notícias
@@ -150,11 +150,10 @@ class AdministradorTeste(unittest.TestCase):
 
         try:
             input = self.selenium.find_element_by_id("id_username")
-            input.send_keys(env('LOGIN'))
+            input.send_keys(env('EMAIL'))
             input = self.selenium.find_element_by_id("id_password")
             input.send_keys(env('PASSWORD'))
             input.send_keys(Keys.ENTER)
-            # input.find_element_by_tag_name("button").click()
         except Exception as e:
             print(e)
 
