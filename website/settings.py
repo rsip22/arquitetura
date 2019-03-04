@@ -17,13 +17,14 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
-root = environ.Path(__file__) - 3
+# Load environment variables
 env = environ.Env(DEBUG=(bool, False),)  # set default values and casting
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+PROJECT_ENV = os.path.join(BASE_DIR, '.env')
+environ.Env.read_env(PROJECT_ENV)
 
 # Media files (images)
 MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = '/media/'
+MEDIA_URL = '/images/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/

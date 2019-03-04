@@ -1,7 +1,9 @@
 import environ
+import os
 import time
 import unittest
 
+from django.conf import settings
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 
@@ -9,7 +11,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 env = environ.Env(
         DEBUG=(bool, True),
     )
-environ.Env.read_env()
+environ.Env.read_env(settings.PROJECT_ENV)
 
 
 class NovoArquitetoTeste(unittest.TestCase):
