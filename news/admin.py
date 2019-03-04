@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import AdminUser
+from .models import AdminUser, Post, Tag
 
 
 class UserCreationForm(forms.ModelForm):
@@ -79,6 +79,8 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
+admin.site.register(Post)
+admin.site.register(Tag)
 admin.site.register(AdminUser, UserAdmin)
 # Since we're not using Django's built-in permissions,
 # unregister the Group model from admin.

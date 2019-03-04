@@ -87,10 +87,10 @@ class CategoriesPageTest(TestCase):
 
     def test_pagina_de_categories_mostra_noticias_da_categoria(self):
         self.tag_arq = Tag.objects.create(name='arquitetura')
-        # self.post1 = Post.objects.create(title='Notícia 01',
-        #                                  text='Lorem ipsum dolor simet')
-        # self.post1.tags.add(self.tag_arq)
-        # self.post1.publish()
+        self.post1 = Post.objects.create(title='Notícia 01',
+                                         text='Lorem ipsum dolor simet')
+        self.post1.tags.add(self.tag_arq)
+        self.post1.publish()
         response = self.client.get(f'/categories/{self.tag_arq.pk}/')
         self.assertEqual(response.status_code, 200)
 
@@ -127,7 +127,6 @@ class ModelsTest(TestCase):
         news3 = Post()
         news3.title = 'Notícia de arquitetura e de decoração'
         news3.text = 'Lorem ipsum libero'
-        # news3.tag = tag_planejamento, tag_decor
         news3.save()
         news3.tags.add(tag_planejamento, tag_decor)
         news3.save()

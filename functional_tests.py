@@ -148,13 +148,15 @@ class AdministradorTeste(unittest.TestCase):
     def test_administrador_pode_acessar_area_restrita_com_email_e_senha(self):
         """
         Administrador pode informar o e-mail e senha para acessar a plataforma.
+        OBS: Usuário, email e senha devem ser cadastrados anteriormente,
+        através do createsuperuser.
         """
         self.selenium.get('http://localhost:8000/admin')
 
         try:
-            input = self.selenium.find_element_by_id("id_username")
+            input = self.selenium.find_element_by_id('id_username')
             input.send_keys(env('EMAIL'))
-            input = self.selenium.find_element_by_id("id_password")
+            input = self.selenium.find_element_by_id('id_password')
             input.send_keys(env('PASSWORD'))
             input.send_keys(Keys.ENTER)
         except Exception as e:
@@ -167,36 +169,55 @@ class AdministradorTeste(unittest.TestCase):
         self.selenium.get('http://localhost:8000/admin')
 
         try:
-            input = self.selenium.find_element_by_id("id_username")
+            input = self.selenium.find_element_by_id('id_username')
             input.send_keys(env('EMAIL'))
-            input = self.selenium.find_element_by_id("id_password")
+            input = self.selenium.find_element_by_id('id_password')
             input.send_keys(env('PASSWORD'))
             input.send_keys(Keys.ENTER)
         except Exception as e:
             print(e)
 
-        time.sleep(1)
+        time.sleep(10)
+        model_post = self.selenium.find_element_by_class_name('model-post')
+        link_add = model_post.find_element_by_link_text('Add')
+        link_add.click()
 
-        self.selenium.get('http://localhost:8000/admin/news/post/add/')
+        time.sleep(10)
 
         try:
-            input = self.selenium.find_element_by_id("id_title")
+            input = self.selenium.find_element_by_id('id_title')
             input.send_keys('Test title for post')
+
             # Administrador consegue definir o texto da notícia.
-            input = self.selenium.find_element_by_id("id_text")
+            input = self.selenium.find_element_by_id('id_text')
             input.send_keys('Lorem ipsum dolor simet')
+
             # Administrador consegue definir uma imagem de capa
-            input = self.selenium.find_element_by_id("id_image_path")
-            input.send_keys('LOREM')
+            input = self.selenium.find_element_by_id(
+                        'id_image_path').send_keys(
+                        '/home/user/Pictures/renata.jpg')
+
+            # Administrador consegue tornar pública a notícia
+            publish = self.selenium.find_element_by_class_name(
+                        'field-published_date')
+            pub_date = publish.find_element_by_link_text('Today')
+            pub_date.click()
+            pub_time = publish.find_element_by_link_text('Now')
+            pub_time.click()
+
             # Administrador consegue informar a qual categoria
             # a notícia pertence.
-            input = self.selenium.find_element_by_id("id_tags")
-            input.send_keys('decoração')
+            try:
+                self.selenium.find_element_by_xpath(
+                    '//select[@id="id_tags"]/option[text()="teste"]').click()
+            except Exception as e:
+                print(e)
+            submit_row = self.selenium.find_element_by_class_name('submit-row')
+            input = submit_row.find_element_by_class_name(
+                    'default').send_keys(Keys.ENTER)
+
         except Exception as e:
             print(e)
-
-    def test_unfinished_tests(self):
-        self.fail('Finish the test!')
 
 
 if __name__ == '__main__':
