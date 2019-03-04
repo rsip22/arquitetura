@@ -4,8 +4,8 @@
 Criar arquivo .env no diretório raiz do projeto com as seguintes variáveis:
 ```
 LOGIN=
+EMAIL=
 PASSWORD=
-DJANGO_SETTINGS_MODULE=news.settings
 SECRET_KEY=
 ```
 

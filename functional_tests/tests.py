@@ -4,6 +4,7 @@ import unittest
 
 from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 
@@ -14,6 +15,9 @@ env = environ.Env(
         DEBUG=(bool, True),
     )
 environ.Env.read_env(settings.PROJECT_ENV)
+
+# Time for Selenium to wait, in seconds
+MAX_WAIT = 1
 
 
 class NovoArquitetoTeste(StaticLiveServerTestCase):
@@ -39,7 +43,6 @@ class NovoArquitetoTeste(StaticLiveServerTestCase):
         self.selenium.get(self.live_server_url)
         self.assertIn('Novidades em arquitetura', self.selenium.title)
 
-    #  TODO: fixtures for these tests
     def test_pode_ver_noticias_com_titulo_imagem_e_tags(self):
         """
         Arquiteto acessa a Home do site, consegue visualizar as notícias
@@ -74,13 +77,18 @@ class NovoArquitetoTeste(StaticLiveServerTestCase):
         section_news = self.selenium.find_element_by_tag_name('section')
         list_news = section_news.find_element_by_tag_name('a')
         list_news.send_keys(Keys.ENTER)
-        time.sleep(1)
 
-        news_article = self.selenium.find_element_by_tag_name('main')
-        news_title = news_article.find_element_by_tag_name('h1')
-        news_image = news_article.find_elements_by_tag_name('img')
-        news_text = news_article.find_elements_by_tag_name('p')
-        news_tags = news_article.find_elements_by_tag_name('li')
+        # Wait for new page to load
+        while True:
+            try:
+                news_article = self.selenium.find_element_by_tag_name('main')
+                news_title = news_article.find_element_by_tag_name('h1')
+                news_image = news_article.find_elements_by_tag_name('img')
+                news_text = news_article.find_elements_by_tag_name('p')
+                news_tags = news_article.find_elements_by_tag_name('li')
+                break
+            except NoSuchElementException:
+                time.sleep(MAX_WAIT)
 
         self.assertIn('Notícia de arquitetura', news_title.text)
 
@@ -88,8 +96,6 @@ class NovoArquitetoTeste(StaticLiveServerTestCase):
         Sendo um Arquiteto eu posso visualizar uma imagem de capa de notícia
         e o conteúdo da mesma.
         """
-        time.sleep(10)
-
         self.assertTrue(
             any(
                 '/media/media/139.jpg' in image.get_attribute('src')
@@ -126,9 +132,14 @@ class NovoArquitetoTeste(StaticLiveServerTestCase):
         news_tag = self.selenium.find_element_by_tag_name('li')
         tag_link = news_tag.find_element_by_tag_name('a')
         tag_link.send_keys(Keys.ENTER)
-        time.sleep(1)
 
-        news_tags = self.selenium.find_elements_by_tag_name('li')
+        # Wait for new page to load
+        while True:
+            try:
+                news_tags = self.selenium.find_elements_by_tag_name('li')
+                break
+            except NoSuchElementException:
+                time.sleep(MAX_WAIT)
 
         self.assertTrue(
             any(
@@ -193,12 +204,19 @@ class AdministradorTeste(StaticLiveServerTestCase):
         except Exception as e:
             print(e)
 
-        time.sleep(10)
-        model_post = self.selenium.find_element_by_class_name('model-post')
-        link_add = model_post.find_element_by_link_text('Add')
+        # Wait for new page to load
+        while True:
+            try:
+                model_post = self.selenium.find_element_by_class_name(
+                    'model-post')
+                link_add = model_post.find_element_by_link_text('Add')
+                break
+            except NoSuchElementException:
+                time.sleep(MAX_WAIT)
+
         link_add.click()
 
-        time.sleep(10)
+        time.sleep(MAX_WAIT)
 
         try:
             input = self.selenium.find_element_by_id('id_title')
@@ -229,6 +247,7 @@ class AdministradorTeste(StaticLiveServerTestCase):
                     + '/option[text()="arquitetura"]').click()
             except Exception as e:
                 print(e)
+
             submit_row = self.selenium.find_element_by_class_name('submit-row')
             input = submit_row.find_element_by_class_name(
                     'default').send_keys(Keys.ENTER)
