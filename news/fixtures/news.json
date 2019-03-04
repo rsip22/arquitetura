@@ -1,0 +1,76 @@
+[
+{
+    "model": "news.tag",
+    "pk": 1,
+    "fields": {
+        "name": "arquitetura"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 2,
+    "fields": {
+        "name": "decora\u00e7\u00e3o"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 3,
+    "fields": {
+        "name": "planejamento"
+    }
+},
+{
+    "model": "news.post",
+    "pk": 1,
+    "fields": {
+        "title": "Notícia de arquitetura",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "image_path": "/media/media/139.jpg",
+        "created_date": "2019-03-04T17:08:51Z",
+        "published_date": "2019-03-04T17:09:59Z",
+        "tags": [
+            1
+        ]
+    }
+},
+{
+    "model": "news.post",
+    "pk": 2,
+    "fields": {
+        "title": "Notícia de planejamento",
+        "text": "Lorem ipsum praesent libero",
+        "image_path": "/media/media/287.jpg",
+        "created_date": "2019-03-04T17:10:09Z",
+        "published_date": "2019-03-04T17:10:28Z",
+        "tags": [
+            3
+        ]
+    }
+},
+{
+    "model": "news.post",
+    "pk": 3,
+    "fields": {
+        "title": "Notícia de arquitetura e de decoração",
+        "text": "Lorem ipsum libero",
+        "created_date": "2019-03-04T17:10:09Z",
+        "published_date": "2019-03-04T17:10:28Z",
+        "tags": [
+            1, 2
+        ]
+    }
+},
+{
+    "model": "news.adminuser",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$120000$Bzptea75U4sn$LO9ybRt1s4CwuqKqHn1vGrYnqBPrW3Id58l9KKu+yrA=",
+        "last_login": null,
+        "email": "admin@email.com",
+        "username": "news_admin",
+        "is_active": true,
+        "is_admin": true
+    }
+}
+]

@@ -21,7 +21,10 @@ class Post(models.Model):
     text = models.TextField(default='')
     image_path = models.ImageField('Endereço da imagem',
                                    upload_to='media',
-                                   default=None)
+                                   default='/media/media/dummy.jpg')
+    image_alt = models.CharField('Texto alternativo',
+                                 max_length=1200,
+                                 blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     tags = models.ManyToManyField(Tag,

@@ -9,6 +9,12 @@ DJANGO_SETTINGS_MODULE=news.settings
 SECRET_KEY=
 ```
 
+Criar superusuário com username, login e senha do arquivo .env:
+
+```
+(myvenv)$ python manage.py createsuperuser
+```
+
 ## Para rodar os testes:
 
 Testes funcionais:

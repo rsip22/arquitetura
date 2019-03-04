@@ -10,13 +10,12 @@
             {% if post.show_tags %}
                 <ul>
                     {% for tag in post.show_tags %}
-                        {{ tag.pk }}
                         <li><a href="{% url 'news:categories_list' pk=tag.pk %}">{{ tag }}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}
-            {% if image_path %}
-                <img src="{{ post.image_path }}" />
+            {% if post.image_path %}
+                <img src="{{ post.image_path.url }}" alt="{{ post.image_path.alt }}" />
             {% else %}
                 <img src="http://placekitten.com/600/400" />
             {% endif %}

@@ -1,11 +1,13 @@
 import environ
-import os
 import time
 import unittest
 
 from django.conf import settings
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
+
+from news.models import AdminUser, Tag
 
 # Load environment variables
 env = environ.Env(
@@ -14,11 +16,13 @@ env = environ.Env(
 environ.Env.read_env(settings.PROJECT_ENV)
 
 
-class NovoArquitetoTeste(unittest.TestCase):
+class NovoArquitetoTeste(StaticLiveServerTestCase):
     """
     Dado que sou um Arquiteto eu posso visualizar notícias, então poderei
     ficar informado sobre as novidades em arquitetura.
     """
+
+    fixtures = ['news/fixtures/news.json']
 
     @classmethod
     def setUpClass(cls):
@@ -32,7 +36,7 @@ class NovoArquitetoTeste(unittest.TestCase):
 
     def test_pode_acessar_home_e_encontrar_o_site(self):
         """ Arquiteto acessa a Home do site """
-        self.selenium.get('http://localhost:8000')
+        self.selenium.get(self.live_server_url)
         self.assertIn('Novidades em arquitetura', self.selenium.title)
 
     #  TODO: fixtures for these tests
@@ -41,7 +45,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         Arquiteto acessa a Home do site, consegue visualizar as notícias
         mais recentes sobre arquitetura, com uma imagem de capa e título
         """
-        self.selenium.get('http://localhost:8000')
+        self.selenium.get(self.live_server_url)
 
         section_news = self.selenium.find_element_by_tag_name('section')
         news_title = section_news.find_elements_by_tag_name('h2')
@@ -49,14 +53,14 @@ class NovoArquitetoTeste(unittest.TestCase):
 
         self.assertTrue(
             any(
-                item.text == 'Novidades sobre arquitetura'
+                item.text == 'Notícia de arquitetura'
                 for item in news_title
             )
         )
 
         self.assertTrue(
             any(
-                'http://placekitten.com/600/400' in image.get_attribute('src')
+                '/media/media/139.jpg' in image.get_attribute('src')
                 for image in news_img
             )
         )
@@ -66,7 +70,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         Arquiteto na Home do site, seleciona uma notícia de
         interesse para visualizar o conteúdo na íntegra.
         """
-        self.selenium.get('http://localhost:8000')
+        self.selenium.get(self.live_server_url)
         section_news = self.selenium.find_element_by_tag_name('section')
         list_news = section_news.find_element_by_tag_name('a')
         list_news.send_keys(Keys.ENTER)
@@ -78,22 +82,25 @@ class NovoArquitetoTeste(unittest.TestCase):
         news_text = news_article.find_elements_by_tag_name('p')
         news_tags = news_article.find_elements_by_tag_name('li')
 
-        self.assertIn('Novidades sobre arquitetura', news_title.text)
+        self.assertIn('Notícia de arquitetura', news_title.text)
 
         """
         Sendo um Arquiteto eu posso visualizar uma imagem de capa de notícia
         e o conteúdo da mesma.
         """
+        time.sleep(10)
+
         self.assertTrue(
             any(
-                'http://placekitten.com/600/400' in image.get_attribute('src')
+                '/media/media/139.jpg' in image.get_attribute('src')
                 for image in news_image
             )
         )
 
         self.assertTrue(
             any(
-                'Lorem ipsum dolor simet' in text.text
+                'Lorem ipsum dolor sit amet,'
+                + ' consectetur adipiscing elit.' in text.text
                 for text in news_text
             )
         )
@@ -115,7 +122,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         as notícias relacionadas àquela categoria são exibidas
         """
 
-        self.selenium.get('http://localhost:8000')
+        self.selenium.get(self.live_server_url)
         news_tag = self.selenium.find_element_by_tag_name('li')
         tag_link = news_tag.find_element_by_tag_name('a')
         tag_link.send_keys(Keys.ENTER)
@@ -131,7 +138,7 @@ class NovoArquitetoTeste(unittest.TestCase):
         )
 
 
-class AdministradorTeste(unittest.TestCase):
+class AdministradorTeste(StaticLiveServerTestCase):
     """
     Dado que sou um Administrador eu posso acessar uma área restrita e segura
     para que somente eu possa inserir novas notícias.
@@ -147,13 +154,20 @@ class AdministradorTeste(unittest.TestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
+    def setUp(self):
+        self.user = AdminUser.objects.create_superuser(
+            username=env('LOGIN'),
+            email=env('EMAIL'),
+            password=env('PASSWORD'))
+        self.tags = Tag.objects.create(name='arquitetura')
+
     def test_administrador_pode_acessar_area_restrita_com_email_e_senha(self):
         """
         Administrador pode informar o e-mail e senha para acessar a plataforma.
-        OBS: Usuário, email e senha devem ser cadastrados anteriormente,
-        através do createsuperuser.
+        OBS: Em produção, usuário, email e senha devem ter sido cadastrados
+        anteriormente, através do createsuperuser.
         """
-        self.selenium.get('http://localhost:8000/admin')
+        self.selenium.get(f'{self.live_server_url}/admin')
 
         try:
             input = self.selenium.find_element_by_id('id_username')
@@ -168,7 +182,7 @@ class AdministradorTeste(unittest.TestCase):
         """
         Administrador pode inserir novas notícias no website
         """
-        self.selenium.get('http://localhost:8000/admin')
+        self.selenium.get(f'{self.live_server_url}/admin')
 
         try:
             input = self.selenium.find_element_by_id('id_username')
@@ -197,7 +211,7 @@ class AdministradorTeste(unittest.TestCase):
             # Administrador consegue definir uma imagem de capa
             input = self.selenium.find_element_by_id(
                         'id_image_path').send_keys(
-                        '/home/user/Pictures/renata.jpg')
+                        f'{settings.MEDIA_DIR}{settings.MEDIA_URL}/139.jpg')
 
             # Administrador consegue tornar pública a notícia
             publish = self.selenium.find_element_by_class_name(
@@ -211,7 +225,8 @@ class AdministradorTeste(unittest.TestCase):
             # a notícia pertence.
             try:
                 self.selenium.find_element_by_xpath(
-                    '//select[@id="id_tags"]/option[text()="teste"]').click()
+                    '//select[@id="id_tags"]'
+                    + '/option[text()="arquitetura"]').click()
             except Exception as e:
                 print(e)
             submit_row = self.selenium.find_element_by_class_name('submit-row')
