@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<h1>Artigos da categoria: {{ category_name|title }}</h1>
+<h2>Artigos da categoria: {{ category_name|title }}</h2>
     {% for post in category_posts %}
         <article>
-            <h2><a href="{% url 'news:post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-            <p>Published: {{ post.published_date }}</p>
+            <h3><a href="{% url 'news:post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+            <p>Publicado: {{ post.published_date }}</p>
             {% if post.show_tags %}
-                <ul>
+                <ul class="list-inline">
                     {% for tag in post.show_tags %}
                         <li><a href="{% url 'news:categories_list' pk=tag.pk %}">{{ tag }}</a></li>
                     {% endfor %}
@@ -23,5 +23,6 @@
                 {{ post.text|linebreaksbr }}
             </p>
         </article>
+        <hr>
     {% endfor %}
 {% endblock %}

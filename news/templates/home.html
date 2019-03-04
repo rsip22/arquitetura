@@ -5,9 +5,9 @@
         {% for item in items %}
             <article>
                 <h2><a href="{% url 'news:post_detail' pk=item.pk %}">{{ item.title }}</a></h2>
-                <p>Published: {{ item.published_date }}</p>
+                <p>Publicado: {{ item.published_date }}</p>
                 {% if item.show_tags %}
-                    <ul>
+                    <ul class="list-inline">
                         {% for tag in item.show_tags %}
                             <li><a href="{% url 'news:categories_list' pk=tag.pk %}">{{ tag }}</a></li>
                         {% endfor %}
@@ -22,7 +22,7 @@
                     {{ item.text|linebreaksbr }}
                 </p>
             </article>
+            <hr>
         {% endfor %}
-        <hr>
     </section>
 {% endblock %}

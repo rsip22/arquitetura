@@ -1,13 +1,46 @@
 <html>
     <header>
-        <title>Novidades em arquitetura</title>
+        <title>{% block title %}Novidades em arquitetura{% endblock %}</title>
+
+        <!-- Twitter Meta Tags -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@rsip22" />
+        <meta name="twitter:creator" content="@rsip22" />
+
+        <!-- Facebook's Open Graph -->
+        <meta property="og:url" content="https://github.com/rsip22/arquitetura/" />
+        <meta property="og:title" content="Novidades em arquitetura" />
+        <meta property="og:description" content="Um site para arquitetos e interessados se manterem atualizados!" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+              integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+              crossorigin="anonymous">
     </header>
     <body>
-        <h1><a href="/">Site Novidades em Arquitetura</a></h1>
+        <div class="container">
+            <div class="jumbotron">
+                <h1 class="text-center"><a href="/">Site Novidades em Arquitetura</a></h1>
+            </div>
+        </div>
         <main>
-            {% load static %}
-            {% block content %}
-            {% endblock %}
+                {% load static %}
+                <div class="container">
+                    <div class="col-sm-12">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
         </main>
+        <footer>
+            <p class="text-muted text-center">Created by <a href="https://www.github.com/rsip22">rsip22</a> with <a href="https://www.djangoproject.com/">Django</a> and <a href="https://getbootstrap.com">Bootstrap</a>. <br> Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+        </footer>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+                crossorigin="anonymous">
+        </script>
     </body>
 </html>
