@@ -145,7 +145,10 @@ class AdministradorTeste(unittest.TestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_administrador_pode_acessar_area_restrita(self):
+    def test_administrador_pode_acessar_area_restrita_com_email_e_senha(self):
+        """
+        Administrador pode informar o e-mail e senha para acessar a plataforma.
+        """
         self.selenium.get('http://localhost:8000/admin')
 
         try:
@@ -157,20 +160,43 @@ class AdministradorTeste(unittest.TestCase):
         except Exception as e:
             print(e)
 
+    def test_administrador_pode_inserir_novas_noticas_no_site(self):
+        """
+        Administrador pode inserir novas notícias no website
+        """
+        self.selenium.get('http://localhost:8000/admin')
+
+        try:
+            input = self.selenium.find_element_by_id("id_username")
+            input.send_keys(env('EMAIL'))
+            input = self.selenium.find_element_by_id("id_password")
+            input.send_keys(env('PASSWORD'))
+            input.send_keys(Keys.ENTER)
+        except Exception as e:
+            print(e)
+
+        time.sleep(1)
+
+        self.selenium.get('http://localhost:8000/admin/news/post/add/')
+
+        try:
+            input = self.selenium.find_element_by_id("id_title")
+            input.send_keys('Test title for post')
+            # Administrador consegue definir o texto da notícia.
+            input = self.selenium.find_element_by_id("id_text")
+            input.send_keys('Lorem ipsum dolor simet')
+            # Administrador consegue definir uma imagem de capa
+            input = self.selenium.find_element_by_id("id_image_path")
+            input.send_keys('LOREM')
+            # Administrador consegue informar a qual categoria
+            # a notícia pertence.
+            input = self.selenium.find_element_by_id("id_tags")
+            input.send_keys('decoração')
+        except Exception as e:
+            print(e)
+
     def test_unfinished_tests(self):
         self.fail('Finish the test!')
-
-
-# =======
-# Administrador pode informar o e-mail e senha para acessar a plataforma.
-
-# =======
-# Dado que sou um Administrador eu posso inserir novas notícias no website
-# então os Arquitetos possam consumir o conteúdo.
-
-# Administrador consegue definir uma imagem de capa e o texto da notícia.
-
-# Administrador consegue informar a qual categoria a notícia pertence.
 
 
 if __name__ == '__main__':
