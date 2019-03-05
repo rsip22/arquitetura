@@ -13,3 +13,6 @@ db.sqlite3
 
 # Enviroment variables
 .env
+
+# Coverage file
+.coverage
