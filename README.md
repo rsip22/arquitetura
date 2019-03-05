@@ -3,7 +3,6 @@
 ## Para rodar o projeto:
 
 1. Criar virtualenv:
-
 ```
 $ python3 -m venv myvenv
 ```
@@ -21,8 +20,7 @@ PASSWORD=
 SECRET_KEY=
 ```
 
-4. Para criar superusuário: username, login e senha:
-
+4. Para criar superusuário e utilizar a interface administrativa:
 ```
 (myvenv)$ python manage.py createsuperuser
 ```
@@ -32,15 +30,14 @@ SECRET_KEY=
 (myvenv)$ python manage.py runserver 0.0.0.0:8000
 ```
 
-## Para rodar os testes:
+## Testando a aplicação:
 
 Você vai precisar ter o Geckodriver instalado e disponível no PATH para utilizar o Selenium.
 
 - Baixe o geckodriver:
 [https://github.com/mozilla/geckodriver/releases](https://github.com/mozilla/geckodriver/releases)
 
-OU com wget:
-
+- OU com wget:
 ```
 $ wget -cv https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
 ```
@@ -53,19 +50,17 @@ $ sudo chmod +x /usr/local/bin/geckodriver
 $ export PATH=$PATH:/usr/local/bin/geckodriver
 ```
 
-Rodar os testes funcionais:
-
+- Rodar testes funcionais:
 ```
 (myvenv)$ python manage.py test functional_tests
 ```
 
-Rodar os testes unitários:
-
+- Rodar testes unitários:
 ```
 (myvenv)$ python manage.py test news
 ```
 
-Cobertura dos testes:
+### Cobertura dos testes:
 ```
 Name                                         Stmts   Miss  Cover
 ----------------------------------------------------------------
@@ -81,8 +76,7 @@ news/views.py                                   13      0   100%
 TOTAL                                          126     81    36%
 ```
 
-Estrutura:
-
+## Estrutura do projeto:
 ```
 .
 ├── README.md
