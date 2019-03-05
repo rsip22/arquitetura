@@ -14,7 +14,7 @@
                     </ul>
                 {% endif %}
                 {% if item.image_path %}
-                    <img src="{{ item.image_path.url }}" alt="{{ item.image_path.alt }}" />
+                    <img src="{{ item.image_path.url }}" alt="{{ item.image_path.alt }}" class="img-responsive" />
                 {% else %}
                     <img src="http://placekitten.com/600/400" />
                 {% endif %}
