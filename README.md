@@ -1,7 +1,19 @@
 # Arquitetura - web app em Django para notícias de arquitetura
 
+## Para rodar o projeto:
 
-Criar arquivo .env no diretório raiz do projeto com as seguintes variáveis:
+1. Criar virtualenv:
+
+```
+$ python3 -m venv myvenv
+```
+
+2. Instalar dependências
+```
+$ pip install -r requirements.txt
+```
+
+3. Criar arquivo .env no diretório raiz do projeto com as seguintes variáveis:
 ```
 LOGIN=
 EMAIL=
@@ -9,21 +21,45 @@ PASSWORD=
 SECRET_KEY=
 ```
 
-Criar superusuário com username, login e senha do arquivo .env:
+4. Para criar superusuário: username, login e senha:
 
 ```
 (myvenv)$ python manage.py createsuperuser
 ```
 
+5. Para rodar o servidor de desenvolvimento:
+```
+(myvenv)$ python manage.py runserver 0.0.0.0:8000
+```
+
 ## Para rodar os testes:
 
-Testes funcionais:
+Você vai precisar ter o Geckodriver instalado e disponível no PATH para utilizar o Selenium.
+
+- Baixe o geckodriver:
+[https://github.com/mozilla/geckodriver/releases](https://github.com/mozilla/geckodriver/releases)
+
+OU com wget:
+
+```
+$ wget -cv https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+```
+
+- Extraia, mova para o diretório bin e coloque no PATH:
+```
+$ tar -xvzf geckodriver-v0.24.0-linux64.tar.gz
+$ sudo cp geckodriver /usr/local/bin
+$ sudo chmod +x /usr/local/bin/geckodriver
+$ export PATH=$PATH:/usr/local/bin/geckodriver
+```
+
+Rodar os testes funcionais:
 
 ```
 (myvenv)$ python manage.py test functional_tests
 ```
 
-Testes unitários:
+Rodar os testes unitários:
 
 ```
 (myvenv)$ python manage.py test news

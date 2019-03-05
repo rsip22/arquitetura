@@ -91,7 +91,7 @@ DATABASES = {
         'OPTIONS': {
             # Set timeout to allow dev testing with SQLite
             # https://docs.djangoproject.com/en/dev/ref/databases/#database-is-locked-errorsoption
-            'timeout': 20,
+            'timeout': 60,
         }
     }
 }

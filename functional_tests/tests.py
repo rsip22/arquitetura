@@ -136,7 +136,7 @@ class NovoArquitetoTeste(StaticLiveServerTestCase):
         # Wait for new page to load
         while True:
             try:
-                news_tags = self.selenium.find_elements_by_tag_name('li')
+                item_tags = self.selenium.find_elements_by_tag_name('li')
                 break
             except NoSuchElementException:
                 time.sleep(MAX_WAIT)
@@ -144,7 +144,7 @@ class NovoArquitetoTeste(StaticLiveServerTestCase):
         self.assertTrue(
             any(
                 'arquitetura' in tags.text
-                for tags in news_tags
+                for tags in item_tags
             )
         )
 
