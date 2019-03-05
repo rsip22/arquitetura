@@ -18,6 +18,7 @@ LOGIN=
 EMAIL=
 PASSWORD=
 SECRET_KEY=
+DEBUG=True
 ```
 
 4. Para criar superusuário e utilizar a interface administrativa:
